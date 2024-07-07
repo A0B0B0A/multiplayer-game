@@ -2,7 +2,7 @@ import socket
 from _thread import *
 import sys
 
-server = "192.168.0.167"
+server = "192.168.1.116"
 port = 2222
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -23,7 +23,7 @@ def read_pos(str):
 def make_pos(tup):
     return str(tup[0]) + "," + str(tup[1])
 
-pos = [(350, 100), (350, 500)]
+pos = [(100, 300), (600, 300)]
 def threaded_client(conn, player):
     conn.send(str.encode(make_pos(pos[player])))
     reply = ""
