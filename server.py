@@ -3,7 +3,7 @@ from _thread import *
 import sys
 import json
 
-server = "192.168.8.112"
+server = "192.168.8.110"
 port = 2222
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
