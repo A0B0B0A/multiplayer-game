@@ -17,6 +17,7 @@ print("Waiting for a connection, Server started")
 
 pos = [(100, 300), (600, 300)]
 bullets = [[], []]
+hp = [[],[]]
 
 def read_pos(str):
     str = str.split(",")
@@ -41,6 +42,7 @@ def threaded_client(conn, player):
             data = json.loads(data)
             pos[player] = data["player"]
             bullets[player] = data["bullets"]
+            # hp[player] = data["hp"]
 
             reply = {"player": pos[1 - player], "bullets": bullets[1 - player]}
             conn.sendall(json.dumps(reply).encode())

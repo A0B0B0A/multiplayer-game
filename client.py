@@ -1,11 +1,15 @@
 import pygame
 from network import Network
 import json
-
+pygame.init()
 
 WIDTH, HEIGHT = 800, 700
 window = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Multiplayer Game(Client)")
+
+font = pygame.font.SysFont('Impact', 100)
+game_over_text2 = font.render("Player 2 win!", True, (255, 0, 0))
+game_over_text1 = font.render("Player 1 win!", True, (255, 0, 0))
 
 clientNumber = 0
 
@@ -86,11 +90,16 @@ def redrawWindow(window, player, player2, bullets, bullets2):
     player.draw(window)
     player.draw_hp()  # Виклик методу для першого гравця
     player2.draw(window)
-    player2.draw_hp()  # Виклик методу для другого гравця
     for bullet in bullets:
         bullet.draw(window)
     for bullet in bullets2:
         bullet.draw(window)
+    if player.hp == 0:
+        window.blit(game_over_text2, (WIDTH/2 - game_over_text2.get_width()/2,
+                                          HEIGHT/2 - game_over_text2.get_height()/2))
+    if player2.hp == 0:
+             window.blit(game_over_text1, (WIDTH/2 - game_over_text1.get_width()/2,
+                                           HEIGHT/2 - game_over_text1.get_height()/2))
     pygame.display.update()
 
 
@@ -149,21 +158,14 @@ def main():
                 p.hp -= 1
                 bullets2.remove(bullet)
         
-        if p.hp == 0:
-            print("Player 2 wins")
-            run = False
-
-        if p2.hp == 0:
-            print("Player 1 wins")
-            run = False
-
+            
         p.move()
         p2.update()
 
         if cooldown > 0:
             cooldown -= 1
 
-        data = {"player": (p.rect.x, p.rect.y), "bullets": [(bullet.x, bullet.y) for bullet in bullets]}
+        data = {"player": (p.rect.x, p.rect.y), "bullets": [(bullet.rect.x, bullet.rect.y) for bullet in bullets]}
         try:
             reply = n.send(json.dumps(data))
             if reply is None:
@@ -171,7 +173,6 @@ def main():
                 continue
 
             reply_data = json.loads(reply)
-            # print(f"Reply: {reply_data}")
             p2.rect.x, p2.rect.y = reply_data["player"]
             bullets2 = [Bullet(bx, by, 10, 5, (255, 0, 0), p2.rect) for bx, by in reply_data["bullets"]]
         except Exception as e:

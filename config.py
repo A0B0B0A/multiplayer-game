@@ -1,4 +1,4 @@
-server = "192.168.8.111"
+server = "192.168.0.182"
 port = 2222
 
-BUFFER_SIZE = 2048
+BUFFER_SIZE = 3072
