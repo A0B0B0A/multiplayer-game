@@ -2,9 +2,7 @@ import socket
 from _thread import *
 import sys
 import json
-
-server = "192.168.8.110"
-port = 2222
+from config import *
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
@@ -35,7 +33,7 @@ def threaded_client(conn, player):
 
     while True:
         try:
-            data = conn.recv(2048).decode()
+            data = conn.recv(BUFFER_SIZE).decode()
             if not data:
                 print("Disconnected")
                 break
